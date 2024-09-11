@@ -2,6 +2,7 @@ package com.globant.project.services;
 
 import java.util.List;
 
+import com.globant.project.domain.dto.ClientDTO;
 import com.globant.project.domain.entities.ClientEntity;
 
 /**
@@ -10,15 +11,17 @@ import com.globant.project.domain.entities.ClientEntity;
 
 public interface ClientService {
 
-    ClientEntity createClient(ClientEntity clientEntity);
+    ClientDTO createClient(ClientDTO clientDto);
 
     Boolean clientExists(String document);
 
-    void updateClient(String document, ClientEntity clientEntity);
+    void updateClient(String document, ClientDTO clientDto);
 
     void deleteClient(String document);
 
-    ClientEntity getClient(String document);
+    ClientDTO getClient(String document);
 
-    List<ClientEntity> getClients();
+    List<ClientDTO> getClients();
+
+    ClientEntity getClientEntity(String uuid);
 }

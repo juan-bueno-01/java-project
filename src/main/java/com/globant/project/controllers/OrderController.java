@@ -1,11 +1,14 @@
 package com.globant.project.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +19,7 @@ import com.globant.project.mappers.OrderMapper;
 import com.globant.project.services.OrderService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,17 +37,32 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDto) {
-        OrderEntity orderEntity = orderMapper.DtoToEntity(orderDto);
-        OrderEntity orderSaved = orderService.createOrder(orderEntity);
-        return new ResponseEntity<>(orderMapper.EntityToDto(orderSaved), HttpStatus.CREATED);
+        OrderDTO orderSaved = orderService.createOrder(orderDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderSaved);
 
     }
 
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getOrders() {
-        List<OrderEntity> orders = orderService.getOrders();
-        return new ResponseEntity<>(orders.stream().map(orderMapper::EntityToDto).toList(), HttpStatus.OK);
+        List<OrderDTO> orders = orderService.getOrders();
+        return ResponseEntity.ok(orders);
 
+    }
+
+    @GetMapping("/{uuid}")
+    public ResponseEntity<OrderDTO> getOrder(
+            @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$") @PathVariable(name = "uuid") String uuid) {
+        OrderDTO order = orderService.getOrder(uuid);
+        return ResponseEntity.ok(order);
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<HttpStatus> updateOrder(
+            @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$") @PathVariable(name = "uuid") String uuid,
+            @Valid @RequestBody OrderDTO orderDto) {
+
+        orderService.updateOrder(uuid, orderDto);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

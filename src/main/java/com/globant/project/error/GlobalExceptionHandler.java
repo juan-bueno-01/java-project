@@ -35,30 +35,31 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = HandlerMethodValidationException.class)
     public ResponseEntity<Map<String, Object>> handleFormatValidationException(HandlerMethodValidationException ex) {
-        return buildErrorResponse("E4002 " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildErrorResponse(ErrorConstants.FORMAT_VALIDATION + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleDataValidationException(MethodArgumentNotValidException ex) {
-        return buildErrorResponse("E4001 " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildErrorResponse(ErrorConstants.FORMAT_VALIDATION + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> handleProductCategoryException(HttpMessageNotReadableException ex) {
-        return buildErrorResponse("E2002 " + ex.getClass().getName() + ex.getMessage(),
+        return buildErrorResponse(
+                ErrorConstants.PRODUCT_CATEGORY_DOES_NOT_EXIST + ex.getClass().getName() + ex.getMessage(),
                 HttpStatus.BAD_REQUEST);
 
     }
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Map<String, Object>> handleException(Exception ex) {
-        return buildErrorResponse("E5000 " + ex.getClass().getName() + ex.getMessage(),
+        return buildErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR + ex.getClass().getName() + ex.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String message, HttpStatus status) {
-        String[] errorArgs = message.substring(6).split(" ");
+        String[] errorArgs = message.substring(5).split(" ");
         String errorCode = message.split(" ")[0];
         String errorMessage = ErrorCode.getErrorDescription(errorCode, errorArgs);
         String errorException = ErrorCode.getErrorException(errorCode, message.substring(6));

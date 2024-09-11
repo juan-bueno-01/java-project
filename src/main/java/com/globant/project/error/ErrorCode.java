@@ -7,19 +7,23 @@ import java.util.Map;
  */
 public class ErrorCode {
     private static final Map<String, String> errorCodes = Map.of(
-            "E5000", "InternalServerErrorException - Internal server error",
+            ErrorConstants.INTERNAL_SERVER_ERROR, "InternalServerErrorException - Internal server error",
 
-            "E1001", "UserAlreadyExistException - User with document %s already exists",
-            "E1002", "UserNotFoundException - User with document %s not found",
+            ErrorConstants.USER_ALREADY_EXIST, "UserAlreadyExistException - User with document %s already exists",
+            ErrorConstants.USER_NOT_FOUND, "UserNotFoundException - User with document %s not found",
 
-            "E2001", "ProductAlreadyExistException - Product with fantasy name %s already exists",
-            "E2002", "ProductCategorylDoesNotExistException - Product category name is not valid",
-            "E2003", "ProductNotFoundException - Product with uuid %s not found",
-            "E2004",
+            ErrorConstants.PRODUCT_ALREADY_EXIST,
+            "ProductAlreadyExistException - Product with fantasy name %s already exists",
+            ErrorConstants.PRODUCT_CATEGORY_DOES_NOT_EXIST,
+            "ProductCategorylDoesNotExistException - Product category name is not valid",
+            ErrorConstants.PRODUCT_NOT_FOUND, "ProductNotFoundException - Product with uuid %s not found",
+            ErrorConstants.PRODUCT_NO_DIFFERENT_FIELD,
             "ProductNoDifferentFieldException -  There is no different field in the Request for product with uuid %s",
 
-            "E4001", "ArgumentValidationException - Invalid or incomplete data",
-            "E4002", "FormatValidationException - Ivalid format"
+            ErrorConstants.ORDER_NOT_FOUND, "OrderNotFoundException - Order with uuid %s not found",
+
+            ErrorConstants.ARGUMENT_VALIDATION, "ArgumentValidationException - Invalid or incomplete data",
+            ErrorConstants.FORMAT_VALIDATION, "FormatValidationException - Ivalid format"
 
     );
 

@@ -3,6 +3,7 @@ package com.globant.project.services;
 import java.util.List;
 import java.util.UUID;
 
+import com.globant.project.domain.dto.ProductDTO;
 import com.globant.project.domain.entities.ProductEntity;
 
 /**
@@ -10,19 +11,16 @@ import com.globant.project.domain.entities.ProductEntity;
  */
 public interface ProductService {
 
-    ProductEntity createProduct(ProductEntity productEntity);
+    ProductDTO createProduct(ProductDTO productDto);
 
-    void updateProduct(UUID uuid, ProductEntity productEntity);
+    void updateProduct(String uuid, ProductDTO productEntity);
 
-    void deleteProduct(UUID uuid);
+    void deleteProduct(String uuid);
 
-    ProductEntity getProduct(UUID uuid);
+    ProductDTO getProduct(String uuid);
 
-    List<ProductEntity> getProducts();
+    List<ProductDTO> getProducts();
 
-    boolean productExistsByFantasyName(String fantasyName);
+    ProductEntity getProductEntity(UUID uuid);
 
-    boolean productExistsByUUID(UUID uuid);
-
-    boolean checkCategory(String category);
 }

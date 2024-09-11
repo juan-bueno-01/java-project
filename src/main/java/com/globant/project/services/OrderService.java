@@ -1,22 +1,25 @@
 package com.globant.project.services;
 
 import java.util.List;
+import java.util.UUID;
 
-import com.globant.project.domain.entities.OrderEntity;
+import com.globant.project.domain.dto.OrderDTO;
 
 /**
  * OrderService
  */
 public interface OrderService {
 
-    OrderEntity createOrder(OrderEntity orderEntity);
+    OrderDTO createOrder(OrderDTO orderDto);
 
-    void updateOrder();
+    void updateOrder(String UUID, OrderDTO orderDto);
 
-    void deleteOrder();
+    void deleteOrder(String UUID);
 
-    void getOrder();
+    OrderDTO getOrder(String uuid);
 
-    List<OrderEntity> getOrders();
+    List<OrderDTO> getOrders();
+
+    boolean orderExists(String uuid);
 
 }

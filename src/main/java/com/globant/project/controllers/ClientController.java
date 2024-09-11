@@ -1,7 +1,6 @@
 package com.globant.project.controllers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.globant.project.domain.dto.ClientDTO;
-import com.globant.project.domain.entities.ClientEntity;
-import com.globant.project.mappers.ClientMapper;
 import com.globant.project.services.ClientService;
 
 import jakarta.validation.Valid;
@@ -32,39 +29,31 @@ import lombok.RequiredArgsConstructor;
 public class ClientController {
 
     private final ClientService clientService;
-    private final ClientMapper clientMapper;
 
     @PostMapping
     public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody ClientDTO clientDto) {
-        ClientEntity clientEntity = clientMapper.DtoToEntity(clientDto);
-        ClientEntity clientSaved = clientService.createClient(clientEntity);
-        return new ResponseEntity<>(clientMapper.EntityToDto(clientSaved), HttpStatus.CREATED);
-
+        ClientDTO clientSaved = clientService.createClient(clientDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientSaved);
     }
 
     @GetMapping
     public ResponseEntity<List<ClientDTO>> getClients() {
-        List<ClientEntity> clients = clientService.getClients();
-        return new ResponseEntity<>(
-                clients.stream().map(clientMapper::EntityToDto).collect(Collectors.toList()),
-                HttpStatus.OK);
-
+        List<ClientDTO> clients = clientService.getClients();
+        return ResponseEntity.ok(clients);
     }
 
     @GetMapping(path = "/{document}")
     public ResponseEntity<ClientDTO> getClient(
             @Pattern(regexp = "[A-Z]+-\\d{6,}") @PathVariable(name = "document") String document) {
-        ClientEntity clientEntity = clientService.getClient(document);
-        return new ResponseEntity<>(clientMapper.EntityToDto(clientEntity), HttpStatus.OK);
-
+        ClientDTO clientDto = clientService.getClient(document);
+        return ResponseEntity.ok(clientDto);
     }
 
     @PutMapping(path = "/{document}")
     public ResponseEntity<HttpStatus> updateClient(
             @Pattern(regexp = "[A-Z]+-\\d{6,}") @PathVariable(name = "document") String document,
             @Valid @RequestBody ClientDTO clientDto) {
-        ClientEntity clientEntity = clientMapper.DtoToEntity(clientDto);
-        clientService.updateClient(document, clientEntity);
+        clientService.updateClient(document, clientDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
