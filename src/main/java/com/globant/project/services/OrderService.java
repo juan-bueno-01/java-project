@@ -1,9 +1,9 @@
 package com.globant.project.services;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.globant.project.domain.dto.OrderDTO;
+import com.globant.project.domain.dto.SalesReportDTO;
 
 /**
  * OrderService
@@ -21,5 +21,7 @@ public interface OrderService {
     List<OrderDTO> getOrders();
 
     boolean orderExists(String uuid);
+
+    SalesReportDTO findProductSalesReportByDates(String startDate, String endDate);
 
 }

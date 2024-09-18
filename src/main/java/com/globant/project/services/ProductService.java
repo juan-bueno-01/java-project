@@ -1,6 +1,7 @@
 package com.globant.project.services;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.globant.project.domain.dto.ProductDTO;
@@ -20,6 +21,10 @@ public interface ProductService {
     ProductDTO getProduct(String uuid);
 
     List<ProductDTO> getProducts();
+
+    List<ProductDTO> getProductsByFantasyName(String fantasyName);
+
+    Set<List<ProductEntity>> getProductsAvailablesByCategory();
 
     ProductEntity getProductEntity(UUID uuid);
 

@@ -2,9 +2,13 @@ package com.globant.project.error;
 
 import java.util.Map;
 
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
+
 /**
  * ErrorCode
  */
+@Component
 public class ErrorCode {
     private static final Map<String, String> errorCodes = Map.of(
             ErrorConstants.INTERNAL_SERVER_ERROR, "InternalServerErrorException - Internal server error",
@@ -27,6 +31,7 @@ public class ErrorCode {
 
     );
 
+    @Cacheable("errorDescriptions")
     public static String getErrorDescription(String code, String... args) {
         if (errorCodes.get(code) == null) {
             return "Unknown error";
@@ -34,6 +39,7 @@ public class ErrorCode {
         return String.format(errorCodes.get(code).split("-")[1], (Object[]) args).strip();
     }
 
+    @Cacheable("errorExceptions")
     public static String getErrorException(String code, String exception) {
         if (errorCodes.get(code) == null) {
             return "Unknown exception";

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -15,10 +16,13 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import com.globant.project.error.exceptions.ConflictException;
 import com.globant.project.error.exceptions.NotFoundException;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * ExceptionHandler
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ConflictException.class)
@@ -53,14 +57,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Map<String, Object>> handleException(Exception ex) {
-        return buildErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR + ex.getClass().getName() + ex.getMessage(),
+        return buildErrorResponse(
+                ErrorConstants.INTERNAL_SERVER_ERROR + ex.getClass().getName() + ExceptionUtils.getStackTrace(ex),
                 HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String message, HttpStatus status) {
-        String[] errorArgs = message.substring(5).split(" ");
+        String[] errorArgs = message.substring(6).split(" ");
         String errorCode = message.split(" ")[0];
+        log.error("Error code: {}, message: {}", errorCode, message);
+        log.error("Error args: {}", (Object[]) errorArgs);
         String errorMessage = ErrorCode.getErrorDescription(errorCode, errorArgs);
         String errorException = ErrorCode.getErrorException(errorCode, message.substring(6));
 
