@@ -2,6 +2,7 @@ package com.globant.project.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
     public void updateProduct(String uuid, ProductDTO productDto) {
         ProductEntity existingProduct = getProductEntity(UUID.fromString(uuid));
         if (!productIsDifferent(existingProduct, productDto)) {
-            throw new ConflictException(ErrorConstants.PRODUCT_NO_DIFFERENT_FIELD + uuid.toString());
+            throw new ConflictException(ErrorConstants.PRODUCT_NO_DIFFERENT_FIELD + " " + uuid.toString());
         }
         String fantasyName = formatFantasyName(productDto.getFantasyName());
 
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(String uuid) {
         ProductEntity product = productRepository.findById(UUID.fromString(uuid))
-                .orElseThrow(() -> new NotFoundException(ErrorConstants.PRODUCT_NOT_FOUND + uuid));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.PRODUCT_NOT_FOUND + " " + uuid));
         productRepository.delete(product);
         log.info("Product deleted with ID: {}", uuid);
     }
@@ -74,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProduct(String uuid) {
         return productRepository.findById(UUID.fromString(uuid)).map(productMapper::EntityToDto)
-                .orElseThrow(() -> new NotFoundException(ErrorConstants.PRODUCT_NOT_FOUND + uuid));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.PRODUCT_NOT_FOUND + " " + uuid));
     }
 
     @Transactional(readOnly = true)
@@ -83,6 +84,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll().stream().map(productMapper::EntityToDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public boolean productExistsByFantasyName(String fantasyName) {
         Optional<ProductEntity> product = productRepository.findByFantasyName(fantasyName);
         return product.isPresent();
@@ -94,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
 
     private void checkIfProductExists(String fantasyName) {
         if (productExistsByFantasyName(fantasyName)) {
-            throw new ConflictException(ErrorConstants.PRODUCT_ALREADY_EXIST + fantasyName);
+            throw new ConflictException(ErrorConstants.PRODUCT_ALREADY_EXIST + " " + fantasyName);
         }
     }
 
@@ -106,10 +108,26 @@ public class ProductServiceImpl implements ProductService {
                 || !productSaved.getAvailable().equals(productDto.getAvailable());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ProductEntity getProductEntity(UUID uuid) {
         return productRepository.findById(uuid)
-                .orElseThrow(() -> new NotFoundException(ErrorConstants.PRODUCT_NOT_FOUND + uuid));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.PRODUCT_NOT_FOUND + " " + uuid));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ProductDTO> getProductsByFantasyName(String fantasyName) {
+        return productRepository.findByFantasyNameContaining(fantasyName).stream().map(productMapper::EntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<List<ProductEntity>> getProductsAvailablesByCategory() {
+        return productRepository.findByAvailable(true).stream()
+                .collect(Collectors.groupingBy(ProductEntity::getCategory)).values().stream()
+                .collect(Collectors.toSet());
     }
 
 }

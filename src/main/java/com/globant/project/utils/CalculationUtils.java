@@ -12,8 +12,8 @@ public class CalculationUtils {
         return price.multiply(new BigDecimal(quantity)).setScale(2, RoundingMode.FLOOR);
     }
 
-    public static BigDecimal calculateTax(BigDecimal subTotal, BigDecimal tax) {
-        return subTotal.multiply(tax).setScale(2, RoundingMode.FLOOR);
+    public static BigDecimal calculateTax(BigDecimal subTotal) {
+        return subTotal.multiply(GlobalUtils.TAX).setScale(2, RoundingMode.FLOOR);
     }
 
     public static BigDecimal calculateGrandTotal(BigDecimal subTotal, BigDecimal tax) {

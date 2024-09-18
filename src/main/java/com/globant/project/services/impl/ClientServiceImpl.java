@@ -1,8 +1,11 @@
 package com.globant.project.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,13 +34,19 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientMapper clientMapper;
 
+    @Value("${default.client.orderBy}")
+    private String orderBy;
+
+    @Value("${default.client.direction}")
+    private String direction;
+
     @Transactional
     @Override
     public ClientDTO createClient(ClientDTO clientDto) {
 
         String document = clientDto.getDocument();
         if (clientExists(document)) {
-            throw new ConflictException(ErrorConstants.USER_ALREADY_EXIST + document);
+            throw new ConflictException(ErrorConstants.USER_ALREADY_EXIST + " " + document);
         }
         ClientEntity clientEntity = clientMapper.DtoToEntity(clientDto);
         ClientEntity savedClient = clientRepository.save(clientEntity);
@@ -49,7 +58,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void updateClient(String document, ClientDTO clientEntity) {
         if (!clientExists(document)) {
-            throw new NotFoundException(ErrorConstants.USER_NOT_FOUND + document);
+            throw new NotFoundException(ErrorConstants.USER_NOT_FOUND + " " + document);
         }
         clientRepository.save(clientMapper.DtoToEntity(clientEntity));
         log.info("Client updated with document: {}", document);
@@ -66,7 +75,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDTO getClient(String document) {
         return clientRepository.findById(document).map(clientMapper::EntityToDto)
-                .orElseThrow(() -> new NotFoundException(ErrorConstants.USER_NOT_FOUND + document));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.USER_NOT_FOUND + " " + document));
     }
 
     @Transactional(readOnly = true)
@@ -84,7 +93,18 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientEntity getClientEntity(String document) {
         return clientRepository.findById(document)
-                .orElseThrow(() -> new NotFoundException(ErrorConstants.USER_NOT_FOUND + document));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.USER_NOT_FOUND + " " + document));
+    }
+
+    @Override
+    public List<ClientDTO> getClientsOrderedBy(Optional<String> orderBy, Optional<String> direction) {
+        Sort.Direction directionSort = Sort.Direction.fromString(direction.orElse(this.direction));
+        String orderByValue = orderBy.orElse(this.orderBy);
+
+        log.info("Clients ordered by {} with direction {}", orderByValue, directionSort);
+
+        return clientRepository.findAll(Sort.by(directionSort, orderByValue)).stream().map(clientMapper::EntityToDto)
+                .collect(Collectors.toList());
     }
 
 }

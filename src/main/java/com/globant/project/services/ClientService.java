@@ -1,6 +1,7 @@
 package com.globant.project.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.globant.project.domain.dto.ClientDTO;
 import com.globant.project.domain.entities.ClientEntity;
@@ -22,6 +23,8 @@ public interface ClientService {
     ClientDTO getClient(String document);
 
     List<ClientDTO> getClients();
+
+    List<ClientDTO> getClientsOrderedBy(Optional<String> orderBy, Optional<String> direction);
 
     ClientEntity getClientEntity(String uuid);
 }
