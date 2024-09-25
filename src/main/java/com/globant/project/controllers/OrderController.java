@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.globant.project.domain.dto.OrderDTO;
@@ -17,8 +18,10 @@ import com.globant.project.domain.dto.SalesReportDTO;
 import com.globant.project.services.OrderService;
 import com.globant.project.utils.RegexUtils;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/")
 @RequiredArgsConstructor
+@Tag(name = "Order", description = "Order operations")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "500", description = "Internal server error"),
 })
@@ -36,6 +40,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    @Operation(summary = "Create a new order")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order created"),
             @ApiResponse(responseCode = "400", description = "Invalid or incomplete order data"),
@@ -47,6 +52,7 @@ public class OrderController {
 
     }
 
+    @Operation(summary = "Get all orders")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order list"),
     })
@@ -57,6 +63,7 @@ public class OrderController {
 
     }
 
+    @Operation(summary = "Get an order by UUID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order retrieved"),
             @ApiResponse(responseCode = "404", description = "Order not found"),
@@ -69,6 +76,7 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+    @Operation(summary = "Update an order")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Order updated"),
             @ApiResponse(responseCode = "404", description = "Order not found"),
@@ -82,14 +90,15 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Get a sales report by dates")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Report retrieved"),
             @ApiResponse(responseCode = "400", description = "Dates are not valid"),
     })
-    @GetMapping("v2/orders/report/{startDate}/{endDate}")
+    @GetMapping("v2/orders/report")
     public ResponseEntity<SalesReportDTO> findProductSalesReportByDates(
-            @Pattern(regexp = RegexUtils.DATE_REGEX) @PathVariable(name = "startDate") String startDate,
-            @Pattern(regexp = RegexUtils.DATE_REGEX) @PathVariable(name = "endDate") String endDate) {
+            @Pattern(regexp = RegexUtils.DATE_REGEX) @RequestParam(name = "startDate") String startDate,
+            @Pattern(regexp = RegexUtils.DATE_REGEX) @RequestParam(name = "endDate") String endDate) {
         SalesReportDTO report = orderService.findProductSalesReportByDates(startDate, endDate);
         return ResponseEntity.ok(report);
     }

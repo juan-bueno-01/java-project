@@ -2,7 +2,6 @@ package com.globant.project.services.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
@@ -74,14 +73,13 @@ public class ClientServiceImpl implements ClientService {
     @Transactional(readOnly = true)
     @Override
     public ClientDTO getClient(String document) {
-        return clientRepository.findById(document).map(clientMapper::EntityToDto)
-                .orElseThrow(() -> new NotFoundException(ErrorConstants.USER_NOT_FOUND + " " + document));
+        return clientMapper.EntityToDto(getClientEntity(document));
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<ClientDTO> getClients() {
-        return clientRepository.findAll().stream().map(clientMapper::EntityToDto).collect(Collectors.toList());
+        return clientRepository.findAll().stream().map(clientMapper::EntityToDto).toList();
     }
 
     @Transactional(readOnly = true)
@@ -104,7 +102,7 @@ public class ClientServiceImpl implements ClientService {
         log.info("Clients ordered by {} with direction {}", orderByValue, directionSort);
 
         return clientRepository.findAll(Sort.by(directionSort, orderByValue)).stream().map(clientMapper::EntityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

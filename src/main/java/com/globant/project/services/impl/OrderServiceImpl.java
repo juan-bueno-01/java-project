@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<OrderDTO> getOrders() {
-        return orderRepository.findAll().stream().map(orderMapper::EntityToDto).collect(Collectors.toList());
+        return orderRepository.findAll().stream().map(orderMapper::EntityToDto).toList();
     }
 
     @Transactional(readOnly = true)
@@ -111,17 +110,17 @@ public class OrderServiceImpl implements OrderService {
         List<List<Object>> productSalesReport = orderRepository.findProductSalesReportByDates(start, end);
         List<ProductSalesDTO> productSalesReportDto = productSalesReport.stream()
                 .map(r -> new ProductSalesDTO((String) r.get(0), (Long) r.get(1), (BigDecimal) r.get(2)))
-                .collect(Collectors.toList());
+                .toList();
 
         List<List<Object>> leastSalesReport = orderRepository.findLeastSoldProductsByDates(start, end);
         List<ProductSalesDTO> leastSalesReportDto = leastSalesReport.stream()
                 .map(r -> new ProductSalesDTO((String) r.get(0), (Long) r.get(1), (BigDecimal) r.get(2)))
-                .collect(Collectors.toList());
+                .toList();
 
         List<List<Object>> mostSalesReport = orderRepository.findMostSoldProductByDates(start, end);
         List<ProductSalesDTO> mostSalesReportDto = mostSalesReport.stream()
                 .map(r -> new ProductSalesDTO((String) r.get(0), (Long) r.get(1), (BigDecimal) r.get(2)))
-                .collect(Collectors.toList());
+                .toList();
 
         SalesReportDTO salesReportDto = new SalesReportDTO(productSalesReportDto, leastSalesReportDto,
                 mostSalesReportDto);
