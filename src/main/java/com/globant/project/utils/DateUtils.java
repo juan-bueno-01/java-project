@@ -2,12 +2,15 @@ package com.globant.project.utils;
 
 import java.time.LocalDateTime;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * DateUtils
  */
+@UtilityClass
 public class DateUtils {
 
-    public static LocalDateTime getDateFromString(String date) {
+    public LocalDateTime getDateFromString(String date) {
         Integer startDateYear = Integer.parseInt(date.substring(0, 4));
         Integer startDateMonth = Integer.parseInt(date.substring(5, 6));
         Integer startDateDay = Integer.parseInt(date.substring(7, 8));

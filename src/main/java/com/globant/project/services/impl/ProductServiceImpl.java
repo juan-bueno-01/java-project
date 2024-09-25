@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public List<ProductDTO> getProducts() {
-        return productRepository.findAll().stream().map(productMapper::EntityToDto).collect(Collectors.toList());
+        return productRepository.findAll().stream().map(productMapper::EntityToDto).toList();
     }
 
     @Transactional(readOnly = true)
@@ -119,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getProductsByFantasyName(String fantasyName) {
         return productRepository.findByFantasyNameContaining(fantasyName).stream().map(productMapper::EntityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)

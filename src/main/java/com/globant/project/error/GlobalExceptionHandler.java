@@ -16,6 +16,7 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import com.globant.project.error.exceptions.ConflictException;
 import com.globant.project.error.exceptions.NotFoundException;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -23,7 +24,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @ControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final ErrorCode ErrorCode;
 
     @ExceptionHandler(value = ConflictException.class)
     public ResponseEntity<Map<String, Object>> handleConflictException(ConflictException ex) {
@@ -39,18 +43,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = HandlerMethodValidationException.class)
     public ResponseEntity<Map<String, Object>> handleFormatValidationException(HandlerMethodValidationException ex) {
-        return buildErrorResponse(ErrorConstants.FORMAT_VALIDATION + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildErrorResponse(ErrorConstants.FORMAT_VALIDATION + " " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleDataValidationException(MethodArgumentNotValidException ex) {
-        return buildErrorResponse(ErrorConstants.FORMAT_VALIDATION + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildErrorResponse(ErrorConstants.FORMAT_VALIDATION + " " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> handleProductCategoryException(HttpMessageNotReadableException ex) {
         return buildErrorResponse(
-                ErrorConstants.PRODUCT_CATEGORY_DOES_NOT_EXIST + ex.getClass().getName() + ex.getMessage(),
+                ErrorConstants.PRODUCT_CATEGORY_DOES_NOT_EXIST + " " + ex.getClass().getName() + ex.getMessage(),
                 HttpStatus.BAD_REQUEST);
 
     }
@@ -58,7 +62,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Map<String, Object>> handleException(Exception ex) {
         return buildErrorResponse(
-                ErrorConstants.INTERNAL_SERVER_ERROR + ex.getClass().getName() + ExceptionUtils.getStackTrace(ex),
+                ErrorConstants.INTERNAL_SERVER_ERROR + " " + ex.getClass().getName() + ExceptionUtils.getStackTrace(ex),
                 HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
@@ -66,8 +70,6 @@ public class GlobalExceptionHandler {
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String message, HttpStatus status) {
         String[] errorArgs = message.substring(6).split(" ");
         String errorCode = message.split(" ")[0];
-        log.error("Error code: {}, message: {}", errorCode, message);
-        log.error("Error args: {}", (Object[]) errorArgs);
         String errorMessage = ErrorCode.getErrorDescription(errorCode, errorArgs);
         String errorException = ErrorCode.getErrorException(errorCode, message.substring(6));
 

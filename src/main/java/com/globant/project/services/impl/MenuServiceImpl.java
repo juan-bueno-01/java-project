@@ -28,11 +28,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public String getMenuPlainText() {
         Set<List<ProductEntity>> productsByCategory = productService.getProductsAvailablesByCategory();
-        String menu = productsByCategory.stream()
-                .map(products -> MenuUtils.formatCategory(products.get(0).getCategory().toString()) + "\n"
-                        + products.stream().map(MenuUtils::formatProductMenu).collect(Collectors.joining("\n")))
-                .collect(Collectors.joining("\n\n"));
-        return MenuUtils.getHeader() + "\n\n\n" + menu;
+        return buildPlainTextMenu(productsByCategory);
     }
 
     @Transactional(readOnly = true)
@@ -40,7 +36,20 @@ public class MenuServiceImpl implements MenuService {
     public byte[] getMenuPdf() throws IOException {
         Set<List<ProductEntity>> productsByCategory = productService.getProductsAvailablesByCategory();
         return MenuUtils.formatMenuPdf(productsByCategory);
-
     }
 
+    private String buildPlainTextMenu(Set<List<ProductEntity>> productsByCategory) {
+        String categoriesMenu = productsByCategory.stream()
+                .map(this::formatCategoryMenu)
+                .collect(Collectors.joining("\n\n"));
+        return MenuUtils.getHeader() + "\n\n\n" + categoriesMenu;
+    }
+
+    private String formatCategoryMenu(List<ProductEntity> products) {
+        String categoryName = MenuUtils.formatCategory(products.get(0).getCategory().toString());
+        String productsMenu = products.stream()
+                .map(MenuUtils::formatProductMenu)
+                .collect(Collectors.joining("\n"));
+        return categoryName + "\n" + productsMenu;
+    }
 }

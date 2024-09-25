@@ -18,12 +18,13 @@ import com.globant.project.domain.dto.ProductDTO;
 import com.globant.project.services.ProductService;
 import com.globant.project.utils.RegexUtils;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * ProductControllers
@@ -31,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/")
 @RequiredArgsConstructor
-@Slf4j
+@Tag(name = "Product", description = "Product operations")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "500", description = "Internal server error"),
 })
@@ -39,6 +40,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @Operation(summary = "Create a new product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product created"),
             @ApiResponse(responseCode = "409", description = "Product with fantasy name already exists"),
@@ -50,6 +52,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productSaved);
     }
 
+    @Operation(summary = "Get all products")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product list"),
     })
@@ -59,15 +62,17 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    @Operation(summary = "Get all products by fantasy name")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product list"),
     })
     @GetMapping("v2/products")
-    public ResponseEntity<List<ProductDTO>> getProductsByFantasyName(@RequestParam("q") String q) {
-        List<ProductDTO> products = productService.getProductsByFantasyName(q);
+    public ResponseEntity<List<ProductDTO>> getProductsByFantasyName(@RequestParam("fantasyName") String fantasyName) {
+        List<ProductDTO> products = productService.getProductsByFantasyName(fantasyName);
         return ResponseEntity.ok(products);
     }
 
+    @Operation(summary = "Get a product by UUID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product retrieved"),
             @ApiResponse(responseCode = "404", description = "Product not found"),
@@ -81,6 +86,7 @@ public class ProductController {
 
     }
 
+    @Operation(summary = "Update a product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "409", description = "No different field in the request for product"),
             @ApiResponse(responseCode = "409", description = "Product with fantasy name already exists"),
@@ -96,6 +102,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Delete a product by UUID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Product deleted"),
             @ApiResponse(responseCode = "404", description = "Product not found"),

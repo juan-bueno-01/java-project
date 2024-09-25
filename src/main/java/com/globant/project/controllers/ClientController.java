@@ -19,8 +19,10 @@ import com.globant.project.domain.dto.ClientDTO;
 import com.globant.project.services.ClientService;
 import com.globant.project.utils.RegexUtils;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/")
 @RequiredArgsConstructor
+@Tag(name = "Client", description = "Client operations")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "500", description = "Internal server error"),
 })
@@ -38,6 +41,7 @@ public class ClientController {
 
     private final ClientService clientService;
 
+    @Operation(summary = "Create a new client")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Client created"),
             @ApiResponse(responseCode = "409", description = "Client document already exists"),
@@ -49,15 +53,17 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clientSaved);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Client list"),
-    })
-    @GetMapping("v1/clients")
-    public ResponseEntity<List<ClientDTO>> getClients() {
-        List<ClientDTO> clients = clientService.getClients();
-        return ResponseEntity.ok(clients);
-    }
+    // @Operation(summary = "Get all clients")
+    // @ApiResponses(value = {
+    // @ApiResponse(responseCode = "200", description = "Client list"),
+    // })
+    // @GetMapping("v1/clients")
+    // public ResponseEntity<List<ClientDTO>> getClients() {
+    // List<ClientDTO> clients = clientService.getClients();
+    // return ResponseEntity.ok(clients);
+    // }
 
+    @Operation(summary = "Get all clients")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Client list"),
     })
@@ -68,6 +74,7 @@ public class ClientController {
         return ResponseEntity.ok(clients);
     }
 
+    @Operation(summary = "Get a client by document")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Client retrieved"),
             @ApiResponse(responseCode = "404", description = "Client not found"),
@@ -80,6 +87,7 @@ public class ClientController {
         return ResponseEntity.ok(clientDto);
     }
 
+    @Operation(summary = "Update a client by document")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Client updated"),
             @ApiResponse(responseCode = "404", description = "Client not found"),
@@ -93,6 +101,7 @@ public class ClientController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Delete a client by document")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Client deleted"),
             @ApiResponse(responseCode = "404", description = "Client not found"),
