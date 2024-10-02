@@ -22,4 +22,10 @@ public class ErrorDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public ErrorDTO(String errorCode, String errorType, String description) {
+        this.errorCode = errorCode;
+        this.errorType = errorType;
+        this.description = description;
+    }
+
 }

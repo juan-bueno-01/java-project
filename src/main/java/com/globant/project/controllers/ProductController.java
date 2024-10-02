@@ -94,7 +94,7 @@ public class ProductController {
             @ApiResponse(responseCode = "204", description = "Product deleted"),
             @ApiResponse(responseCode = "400", description = "Product UUID is not valid"),
     })
-    @PutMapping("v1/producs/{uuid}")
+    @PutMapping("v1/products/{uuid}")
     public ResponseEntity<Void> updateProduct(
             @Pattern(regexp = RegexUtils.UUID_REGEX) @PathVariable(name = "uuid") String uuid,
             @Valid @RequestBody ProductDTO productDto) {

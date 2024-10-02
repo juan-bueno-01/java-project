@@ -45,12 +45,13 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO createOrder(OrderDTO orderDto) {
 
         OrderEntity orderEntity = orderMapper.DtoToEntity(orderDto);
-        ClientEntity client = clientService.getClientEntity(orderEntity.getClientDocument().getDocument());
-        ProductEntity product = productService.getProductEntity(orderEntity.getProductUuid().getUuid());
+        ClientEntity clientEntity = clientService.getClientEntity(orderEntity.getClientDocument().getDocument());
+        ProductEntity productEntity = productService.getProductEntity(orderEntity.getProductUuid().getUuid());
 
-        orderEntity.setClientDocument(client);
-        orderEntity.setProductUuid(product);
-        orderEntity.setSubTotal(CalculationUtils.calculateSubTotal(product.getPrice(), orderEntity.getQuantity()));
+        orderEntity.setClientDocument(clientEntity);
+        orderEntity.setProductUuid(productEntity);
+        orderEntity
+                .setSubTotal(CalculationUtils.calculateSubTotal(productEntity.getPrice(), orderEntity.getQuantity()));
         orderEntity.setTax(CalculationUtils.calculateTax(orderEntity.getSubTotal()));
         orderEntity
                 .setGrandTotal(CalculationUtils.calculateGrandTotal(orderEntity.getSubTotal(), orderEntity.getTax()));
@@ -85,6 +86,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void updateOrder(String uuid, OrderDTO orderEntity) {
+        orderEntity.setUuid(UUID.fromString(uuid));
         if (!orderExists(uuid)) {
             throw new NotFoundException(ErrorConstants.ORDER_NOT_FOUND + " " + uuid);
         }

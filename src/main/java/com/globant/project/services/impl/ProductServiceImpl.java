@@ -49,15 +49,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProduct(String uuid, ProductDTO productDto) {
         ProductEntity existingProduct = getProductEntity(UUID.fromString(uuid));
+        String fantasyName = formatFantasyName(productDto.getFantasyName());
+        productDto.setFantasyName(fantasyName);
+
+        log.info("Compare existing product {} with new product {}", existingProduct, productDto);
         if (!productIsDifferent(existingProduct, productDto)) {
             throw new ConflictException(ErrorConstants.PRODUCT_NO_DIFFERENT_FIELD + " " + uuid.toString());
         }
-        String fantasyName = formatFantasyName(productDto.getFantasyName());
 
         if (!existingProduct.getFantasyName().equals(fantasyName)) {
             checkIfProductExists(fantasyName);
-            productDto.setFantasyName(fantasyName);
         }
+        productDto.setUuid(UUID.fromString(uuid));
         productRepository.save(productMapper.DtoToEntity(productDto));
         log.info("Product updated with ID: {}", uuid);
     }

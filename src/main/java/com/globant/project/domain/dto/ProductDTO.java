@@ -12,14 +12,18 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ProductDTO
  */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDTO {
 
     private UUID uuid;
@@ -48,4 +52,13 @@ public class ProductDTO {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public ProductDTO(String fantasyName, Category category, String description, BigDecimal price,
+            Boolean available) {
+        this.fantasyName = fantasyName;
+        this.category = category;
+        this.description = description;
+        this.price = price;
+        this.available = available;
+    }
 }

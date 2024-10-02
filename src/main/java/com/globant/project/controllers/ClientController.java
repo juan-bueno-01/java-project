@@ -70,7 +70,7 @@ public class ClientController {
     @GetMapping("v2/clients")
     public ResponseEntity<List<ClientDTO>> getClientsOrderedBy(@RequestParam(name = "orderBy") Optional<String> orderBy,
             @RequestParam(name = "direction") Optional<String> direction) {
-        List<ClientDTO> clients = clientService.getClientsOrderedBy(orderBy, direction);
+        List<ClientDTO> clients = clientService.getClients(orderBy, direction);
         return ResponseEntity.ok(clients);
     }
 

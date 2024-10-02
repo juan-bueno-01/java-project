@@ -78,12 +78,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ClientDTO> getClients() {
-        return clientRepository.findAll().stream().map(clientMapper::EntityToDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public Boolean clientExists(String document) {
         return clientRepository.existsById(document);
     }
@@ -95,7 +89,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDTO> getClientsOrderedBy(Optional<String> orderBy, Optional<String> direction) {
+    public List<ClientDTO> getClients(Optional<String> orderBy, Optional<String> direction) {
+        String sortDirection = direction.orElse(this.direction);
+        if (sortDirection == null
+                || (!sortDirection.equalsIgnoreCase("asc") && !sortDirection.equalsIgnoreCase("desc"))) {
+            log.error("Invalid value for sortDirection: {}", sortDirection);
+            throw new IllegalArgumentException("Invalid value '" + sortDirection
+                    + "' for orders given; Has to be either 'desc' or 'asc' (case insensitive)");
+        }
         Sort.Direction directionSort = Sort.Direction.fromString(direction.orElse(this.direction));
         String orderByValue = orderBy.orElse(this.orderBy);
 

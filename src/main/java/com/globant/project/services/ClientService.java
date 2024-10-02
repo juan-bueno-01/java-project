@@ -22,9 +22,7 @@ public interface ClientService {
 
     ClientDTO getClient(String document);
 
-    List<ClientDTO> getClients();
-
-    List<ClientDTO> getClientsOrderedBy(Optional<String> orderBy, Optional<String> direction);
+    List<ClientDTO> getClients(Optional<String> orderBy, Optional<String> direction);
 
     ClientEntity getClientEntity(String uuid);
 }

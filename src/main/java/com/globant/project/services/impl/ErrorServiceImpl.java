@@ -62,6 +62,7 @@ public class ErrorServiceImpl implements ErrorService {
 
     @Override
     public void updateError(String errorCode, ErrorDTO errorDto) {
+        errorDto.setErrorCode(errorCode);
         if (!errorExists(errorCode)) {
             throw new NotFoundException(getErrorDescription(ErrorConstants.ERROR_NOT_FOUND, errorCode));
         }
@@ -103,7 +104,11 @@ public class ErrorServiceImpl implements ErrorService {
         log.info("Error codes refreshed.");
     }
 
+    @Override
     public String getErrorDescription(String code, String... args) {
+        if (!errorCodeMap.containsKey(code)) {
+            return "Unknown error";
+        }
         String description = errorCodeMap.get(code).split(":")[1];
         if (description == null) {
             return "Unknown error";
@@ -111,10 +116,14 @@ public class ErrorServiceImpl implements ErrorService {
         return String.format(description, (Object[]) args).strip();
     }
 
+    @Override
     public String getErrorException(String code, String exception) {
+        if (!errorCodeMap.containsKey(code)) {
+            return "Unknown exception";
+        }
         String errorType = errorCodeMap.get(code).split(":")[0];
         if (errorType == null) {
-            return "Unknown error";
+            return "Unknown exception";
         }
         return errorType + ": " + exception;
     }
