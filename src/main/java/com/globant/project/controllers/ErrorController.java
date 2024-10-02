@@ -83,7 +83,7 @@ public class ErrorController {
             @Pattern(regexp = RegexUtils.ERROR_CODE_REGEX) @PathVariable(name = "errorCode") String errorCode,
             @Valid @RequestBody ErrorDTO errorDto) {
         errorService.updateError(errorCode, errorDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Delete an error")

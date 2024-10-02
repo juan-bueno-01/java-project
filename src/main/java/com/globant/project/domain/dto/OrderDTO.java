@@ -13,14 +13,18 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * DeliveryDTO
  */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDTO {
     private UUID uuid;
 
@@ -65,4 +69,11 @@ public class OrderDTO {
 
     private LocalDateTime updatedAt;
 
+    public OrderDTO(UUID uuid, String clientDocument, String productUuid, Integer quantity, String extraInformation) {
+        this.uuid = uuid;
+        this.clientDocument = clientDocument;
+        this.productUuid = productUuid;
+        this.quantity = quantity;
+        this.extraInformation = extraInformation;
+    }
 }

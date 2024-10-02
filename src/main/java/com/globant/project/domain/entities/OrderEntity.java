@@ -83,4 +83,13 @@ public class OrderEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public OrderEntity(UUID uuid, ClientEntity client, ProductEntity product, Integer quantity,
+            String extraInformation) {
+        this.uuid = uuid;
+        this.clientDocument = client;
+        this.productUuid = product;
+        this.quantity = quantity;
+        this.extraInformation = extraInformation;
+    }
 }

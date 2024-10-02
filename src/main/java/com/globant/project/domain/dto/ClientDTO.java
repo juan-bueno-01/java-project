@@ -2,8 +2,10 @@ package com.globant.project.domain.dto;
 
 import java.time.LocalDateTime;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -45,5 +47,13 @@ public class ClientDTO {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public ClientDTO(String document, String name, String email, String phone, String deliveryAddress) {
+        this.document = document;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.deliveryAddress = deliveryAddress;
+    }
 
 }

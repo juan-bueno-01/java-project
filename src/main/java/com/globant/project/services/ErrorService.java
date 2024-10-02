@@ -21,4 +21,8 @@ public interface ErrorService {
 
     Boolean errorExists(String uuid);
 
+    String getErrorDescription(String code, String... args);
+
+    String getErrorException(String code, String exception);
+
 }
