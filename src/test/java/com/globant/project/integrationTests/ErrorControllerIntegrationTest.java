@@ -16,10 +16,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.globant.project.application.ports.in.services.ErrorService;
 import com.globant.project.domain.dto.ErrorDTO;
-import com.globant.project.error.exceptions.ConflictException;
-import com.globant.project.error.exceptions.NotFoundException;
-import com.globant.project.services.ErrorService;
+import com.globant.project.domain.excepions.ConflictException;
+import com.globant.project.domain.excepions.NotFoundException;
 
 /**
  * ErrorControllerIntegrationTest

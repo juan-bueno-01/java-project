@@ -18,11 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.globant.project.application.ports.in.services.ProductService;
 import com.globant.project.domain.dto.ProductDTO;
 import com.globant.project.domain.entities.Category;
-import com.globant.project.error.exceptions.ConflictException;
-import com.globant.project.error.exceptions.NotFoundException;
-import com.globant.project.services.ProductService;
+import com.globant.project.domain.excepions.ConflictException;
+import com.globant.project.domain.excepions.NotFoundException;
 
 /**
  * ProductControlelrIntegrationTest

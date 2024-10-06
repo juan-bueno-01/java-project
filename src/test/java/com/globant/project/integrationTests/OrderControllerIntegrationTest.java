@@ -16,12 +16,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.globant.project.application.ports.in.services.OrderService;
 import com.globant.project.domain.dto.OrderDTO;
 import com.globant.project.domain.dto.ProductSalesDTO;
 import com.globant.project.domain.dto.SalesReportDTO;
-import com.globant.project.error.exceptions.ConflictException;
-import com.globant.project.error.exceptions.NotFoundException;
-import com.globant.project.services.OrderService;
+import com.globant.project.domain.excepions.ConflictException;
+import com.globant.project.domain.excepions.NotFoundException;
 
 /**
  * OrderControllerIntegrationTest

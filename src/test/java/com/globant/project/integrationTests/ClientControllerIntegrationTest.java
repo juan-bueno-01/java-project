@@ -17,10 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.globant.project.application.ports.in.services.ClientService;
 import com.globant.project.domain.dto.ClientDTO;
-import com.globant.project.error.exceptions.ConflictException;
-import com.globant.project.error.exceptions.NotFoundException;
-import com.globant.project.services.ClientService;
+import com.globant.project.domain.excepions.ConflictException;
+import com.globant.project.domain.excepions.NotFoundException;
 
 /**
  * ClientControllerIntegrationTest

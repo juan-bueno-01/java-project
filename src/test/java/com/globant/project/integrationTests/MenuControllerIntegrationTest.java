@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.globant.project.services.MenuService;
+import com.globant.project.application.ports.in.services.MenuService;
 
 /**
  * MenuControllerIntegrationTest
