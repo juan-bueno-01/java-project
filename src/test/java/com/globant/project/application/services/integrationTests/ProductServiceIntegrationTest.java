@@ -122,4 +122,10 @@ public class ProductServiceIntegrationTest {
         Set<List<ProductEntity>> productsRetrieved = productService.getProductsAvailablesByCategory();
         assertEquals(1, productsRetrieved.size());
     }
+
+    @Test
+    void givenNotExistingProduct_whenFormatFantasyName_thenFantasyNameIsFormatted() {
+        String fantasyName = productService.formatFantasyName("FantasyName");
+        assertEquals("FANTASYNAME", fantasyName);
+    }
 }

@@ -1,4 +1,4 @@
-package com.globant.project.integrationTests;
+package com.globant.project.infrastructure.adapters.in.rest.integrationTests;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

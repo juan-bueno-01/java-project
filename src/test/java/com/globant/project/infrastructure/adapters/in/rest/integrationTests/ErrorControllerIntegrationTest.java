@@ -1,4 +1,4 @@
-package com.globant.project.integrationTests;
+package com.globant.project.infrastructure.adapters.in.rest.integrationTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

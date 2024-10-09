@@ -88,6 +88,10 @@ public class ProductServiceUnitTest {
     @Test
     public void updateProduct_WhenProductExists_ShouldUpdateProduct() {
         productDto.setFantasyName("NEWFANTASYNAME");
+        productDto.setCategory(Category.CHICKEN);
+        productDto.setDescription("NEWDESCRIPTION");
+        productDto.setPrice(new BigDecimal(2));
+        productDto.setAvailable(false);
         when(productRepository.findById(productDto.getUuid())).thenReturn(Optional.of(productEntity));
         when(productRepository.findByFantasyName(productDto.getFantasyName()))
                 .thenReturn(Optional.empty());
@@ -159,6 +163,20 @@ public class ProductServiceUnitTest {
         when(productRepository.findByFantasyName(productDto.getFantasyName())).thenReturn(Optional.empty());
 
         assertEquals(false, productService.productExistsByFantasyName(productDto.getFantasyName()));
+    }
+
+    @Test
+    public void formatProduct_WhenProductExists_ShouldReturnProduct() {
+        String fantasyName = "FantasyName";
+        String formattedFantasyName = productService.formatFantasyName(fantasyName);
+        assertEquals(fantasyName.toUpperCase(), formattedFantasyName);
+    }
+
+    @Test
+    public void formatProduct_WhenProductDoesNotExist_ShouldReturnProduct() {
+        String fantasyName = null;
+        String formattedFantasyName = productService.formatFantasyName(fantasyName);
+        assertEquals(null, formattedFantasyName);
     }
 
 }

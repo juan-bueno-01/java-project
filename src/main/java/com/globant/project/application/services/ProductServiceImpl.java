@@ -93,11 +93,12 @@ public class ProductServiceImpl implements ProductService {
         return product.isPresent();
     }
 
-    private String formatFantasyName(String fantasyName) {
+    @Override
+    public String formatFantasyName(String fantasyName) {
         return fantasyName != null ? fantasyName.toUpperCase() : null;
     }
 
-    private void checkIfProductExists(String fantasyName) {
+    public void checkIfProductExists(String fantasyName) {
         if (productExistsByFantasyName(fantasyName)) {
             throw new ConflictException(ErrorConstants.PRODUCT_ALREADY_EXIST + " " + fantasyName);
         }

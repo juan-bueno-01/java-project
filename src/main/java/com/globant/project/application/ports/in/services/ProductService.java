@@ -28,4 +28,6 @@ public interface ProductService {
 
     ProductEntity getProductEntity(UUID uuid);
 
+    String formatFantasyName(String fantasyName);
+
 }

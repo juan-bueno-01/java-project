@@ -150,6 +150,12 @@ public class ClientServiceUnitTest {
     }
 
     @Test
+    public void getClientsWithInvalidParams_ShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> clientService.getClients(Optional.of("invalid"), Optional.of("invalid")));
+    }
+
+    @Test
     public void getClientEntity_WhenClientExists_ShouldReturnClientEntity() {
         when(clientRepository.findById(clientDto.getDocument())).thenReturn(Optional.of(clientEntity));
 

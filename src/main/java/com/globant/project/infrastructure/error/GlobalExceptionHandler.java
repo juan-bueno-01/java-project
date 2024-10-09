@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
+    @Autowired
     private final ErrorCode ErrorCode;
 
     @ExceptionHandler(value = ConflictException.class)
