@@ -1,5 +1,6 @@
 package com.globant.project.application.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,6 +43,8 @@ public class ProductServiceImpl implements ProductService {
         ProductEntity product = productMapper.DtoToEntity(productDto);
         ProductEntity savedProduct = productRepository.save(product);
         log.info("Product created with ID: {}", product.getUuid());
+        savedProduct.setCreatedAt(LocalDateTime.now());
+        savedProduct.setUpdatedAt(LocalDateTime.now());
         return productMapper.EntityToDto(savedProduct);
     }
 

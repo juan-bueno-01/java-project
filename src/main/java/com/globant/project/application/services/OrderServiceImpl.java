@@ -59,6 +59,8 @@ public class OrderServiceImpl implements OrderService {
 
         OrderEntity orderSaved = orderRepository.save(orderEntity);
         log.info("Order created with uuid: {}", orderSaved.getUuid());
+        orderSaved.setCreatedAt(LocalDateTime.now());
+        orderSaved.setUpdatedAt(LocalDateTime.now());
         return orderMapper.EntityToDto(orderSaved);
 
     }
