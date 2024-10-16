@@ -1,5 +1,6 @@
 package com.globant.project.application.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,8 @@ public class ClientServiceImpl implements ClientService {
         ClientEntity clientEntity = clientMapper.DtoToEntity(clientDto);
         ClientEntity savedClient = clientRepository.save(clientEntity);
         log.info("Client created with document: {}", document);
+        savedClient.setCreatedAt(LocalDateTime.now());
+        savedClient.setUpdatedAt(LocalDateTime.now());
         return clientMapper.EntityToDto(savedClient);
     }
 

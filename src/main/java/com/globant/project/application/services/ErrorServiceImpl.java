@@ -18,6 +18,7 @@ import com.globant.project.domain.excepions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,8 @@ public class ErrorServiceImpl implements ErrorService {
         ErrorEntity savedError = errorRepository.save(errorEntity);
         log.info("Error created with code: {}", errorCode);
         refreshErrorCodes();
+        savedError.setUpdatedAt(LocalDateTime.now());
+        savedError.setCreatedAt(LocalDateTime.now());
         return errorMapper.EntityToDto(savedError);
     }
 
