@@ -15,6 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.globant.project.application.ports.in.services.ClientService;
 import com.globant.project.application.ports.out.repositories.ClientRepository;
+import com.globant.project.application.ports.out.repositories.OrderRepository;
 import com.globant.project.domain.dto.ClientDTO;
 import com.globant.project.domain.excepions.ConflictException;
 import com.globant.project.domain.excepions.NotFoundException;
@@ -33,11 +34,15 @@ public class ClientServiceIntegrationTest {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     private ClientDTO clientDTO;
     private ClientDTO clientSaved;
 
     @BeforeEach
     void setup() {
+        orderRepository.deleteAll();
         clientRepository.deleteAll();
         clientDTO = new ClientDTO("CC-123456", "Juan Perez", "juanPerez@example.com",
                 "3123456789", "Calle 123");
