@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.globant.project.application.mappers.OrderMapper;
 import com.globant.project.application.ports.in.services.ClientService;
+import com.globant.project.application.ports.in.services.InvoiceService;
 import com.globant.project.application.ports.in.services.OrderService;
 import com.globant.project.application.ports.in.services.ProductService;
 import com.globant.project.application.ports.out.repositories.OrderRepository;
 import com.globant.project.application.utils.CalculationUtils;
 import com.globant.project.application.utils.DateUtils;
 import com.globant.project.application.utils.ErrorConstants;
+import com.globant.project.application.utils.GlobalUtils;
+import com.globant.project.domain.dto.InvoiceDTO;
+import com.globant.project.domain.dto.InvoiceProduct;
 import com.globant.project.domain.dto.OrderDTO;
 import com.globant.project.domain.dto.ProductSalesDTO;
 import com.globant.project.domain.dto.SalesReportDTO;
@@ -40,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
     private final ProductService productService;
     private final OrderMapper orderMapper;
 
+    private final InvoiceService invoiceService;
+
     @Transactional
     @Override
     public OrderDTO createOrder(OrderDTO orderDto) {
@@ -57,12 +63,19 @@ public class OrderServiceImpl implements OrderService {
                 .setGrandTotal(CalculationUtils.calculateGrandTotal(orderEntity.getSubTotal(), orderEntity.getTax()));
         orderEntity.setDelivered(false);
 
+        InvoiceProduct invoiceProduct = new InvoiceProduct(orderEntity.getQuantity(), productEntity.getPrice(), "IVA",
+                GlobalUtils.TAX.multiply(BigDecimal.valueOf(100)));
+        InvoiceDTO invoiceDTO = new InvoiceDTO(clientEntity.getInvoiceClientId(), List.of(invoiceProduct),
+                orderEntity.getGrandTotal());
+
+        String invoiceId = invoiceService.createInvoice(invoiceDTO);
+        orderEntity.setInvoiceId(invoiceId);
+
         OrderEntity orderSaved = orderRepository.save(orderEntity);
         log.info("Order created with uuid: {}", orderSaved.getUuid());
         orderSaved.setCreatedAt(LocalDateTime.now());
         orderSaved.setUpdatedAt(LocalDateTime.now());
         return orderMapper.EntityToDto(orderSaved);
-
     }
 
     @Transactional(readOnly = true)

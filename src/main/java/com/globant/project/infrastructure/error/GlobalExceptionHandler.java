@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
         errorAttributes.put("code", errorCode);
         errorAttributes.put("timestamp", LocalDateTime.now());
         errorAttributes.put("description", errorMessage);
-        errorAttributes.put("exception", errorException);
+        errorAttributes.put("exception", errorException + " " + message);
 
         return new ResponseEntity<>(errorAttributes, status);
     }

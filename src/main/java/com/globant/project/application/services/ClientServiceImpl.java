@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.globant.project.application.mappers.ClientMapper;
 import com.globant.project.application.ports.in.services.ClientService;
+import com.globant.project.application.ports.in.services.InvoiceService;
 import com.globant.project.application.ports.out.repositories.ClientRepository;
 import com.globant.project.application.utils.ErrorConstants;
 import com.globant.project.domain.dto.ClientDTO;
+import com.globant.project.domain.dto.InvoiceClientDTO;
 import com.globant.project.domain.entities.ClientEntity;
 import com.globant.project.domain.excepions.ConflictException;
 import com.globant.project.domain.excepions.NotFoundException;
@@ -34,6 +36,8 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientMapper clientMapper;
 
+    private final InvoiceService invoiceService;
+
     @Value("${default.client.orderBy}")
     private String orderBy;
 
@@ -48,9 +52,16 @@ public class ClientServiceImpl implements ClientService {
         if (clientExists(document)) {
             throw new ConflictException(ErrorConstants.USER_ALREADY_EXIST + " " + document);
         }
+
+        InvoiceClientDTO invoiceClient = new InvoiceClientDTO(document, clientDto.getName());
+        String invoiceClientId = invoiceService.createInvoiceClient(invoiceClient);
+
         ClientEntity clientEntity = clientMapper.DtoToEntity(clientDto);
+        clientEntity.setInvoiceClientId(invoiceClientId);
         ClientEntity savedClient = clientRepository.save(clientEntity);
+
         log.info("Client created with document: {}", document);
+
         savedClient.setCreatedAt(LocalDateTime.now());
         savedClient.setUpdatedAt(LocalDateTime.now());
         return clientMapper.EntityToDto(savedClient);

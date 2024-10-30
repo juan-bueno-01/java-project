@@ -45,6 +45,8 @@ public class ClientEntity {
     @Size(min = 1, max = 500, message = "Address must be between 1 and 500 characters")
     private String deliveryAddress;
 
+    private String invoiceClientId;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -55,4 +57,14 @@ public class ClientEntity {
     // @OneToMany(mappedBy = "clientDocument")
     // private Set<OrderEntity> orders;
 
+    public ClientEntity(String document, String name, String email, String phone, String deliveryAddress,
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.document = document;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.deliveryAddress = deliveryAddress;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

@@ -65,6 +65,8 @@ public class OrderDTO {
     @Column(nullable = true)
     private LocalDateTime deliveredDate;
 
+    private String invoiceId;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

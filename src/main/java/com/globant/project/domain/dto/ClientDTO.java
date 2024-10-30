@@ -42,16 +42,22 @@ public class ClientDTO {
     @Size(min = 1, max = 500, message = "Address must be between 1 and 500 characters")
     private String deliveryAddress;
 
+    private String invoiceClientId;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    public ClientDTO(String document, String name, String email, String phone, String deliveryAddress) {
+    public ClientDTO(String document, String name, String email, String phone, String deliveryAddress,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
         this.document = document;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.deliveryAddress = deliveryAddress;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
 }

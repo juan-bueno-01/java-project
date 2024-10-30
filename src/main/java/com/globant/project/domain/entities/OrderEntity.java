@@ -77,6 +77,8 @@ public class OrderEntity {
     @Column(nullable = true)
     private LocalDateTime deliveredDate;
 
+    private String invoiceId;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
