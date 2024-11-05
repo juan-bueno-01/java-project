@@ -60,4 +60,12 @@ public class ClientDTO {
         this.updatedAt = updatedAt;
     }
 
+    public ClientDTO(String document, String name, String email, String phone, String deliveryAddress) {
+        this.document = document;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.deliveryAddress = deliveryAddress;
+    }
+
 }
